@@ -13,10 +13,7 @@ export function middleware(request) {
   const isProtectedPath = protectedPaths.includes(path);
 
   // Extract Bearer token from Authorization header
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.startsWith('Bearer ')
-    ? authHeader.split(' ')[1]
-    : '';
+  const token = request.cookies.get('token')?.value || '';
 
   // Redirect logic
   if (isPublicPath && token) {

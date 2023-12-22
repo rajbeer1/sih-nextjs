@@ -31,7 +31,7 @@ export default function Linegraph({ datas, datakey }) {
       <Tooltip />
       <Legend />
       <Line
-        type="monotone"
+        type="monotoneX"
         dataKey={datakey}
         stroke="#8884d8"
         activeDot={{ r: 8 }}

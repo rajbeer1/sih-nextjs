@@ -1,0 +1,28 @@
+/* DataBox.module.css */
+.dataBox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border: 1px solid #8884d8;
+  padding: 20px;
+  width: 75%;
+  margin: 20px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.dataEntry {
+  width: 45%;
+  margin: 10px;
+  font-size: larger;
+}
+
+.rightAligned {
+  text-align: right;
+}
+
+.dataValue {
+  margin-left: 4px;
+}
