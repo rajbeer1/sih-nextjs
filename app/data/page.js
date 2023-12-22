@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link";
 import DataBox from "./databox";
 import Linegraph from "./linegraph";
+import Cookies from 'js-cookie';
 export default function () {
   const [tempdata, settemp] = useState([]);
   const [altdata, setaltdata] = useState([]);
@@ -15,7 +16,8 @@ function getCookie(name) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
-  const token = getCookie('token')
+  const token = Cookies.get('token');
+  const [showPopup, setShowPopup] = useState(false);
 
   const gettemp = async () => {
     try {
@@ -42,6 +44,22 @@ function getCookie(name) {
     }
   ;
   }
+  const handleSOSClick = async () => {
+    try {
+      const response = await axios.post(
+        'http://4.227.178.188:3001/sos/send',
+        {}, // Request body (if any)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.email) {
+        setShowPopup(true);
+      }
+    } catch (err) {}
+  };
   const getlng = async () => {
     try {
       const response = await axios.get(
@@ -123,8 +141,6 @@ function getCookie(name) {
           borderBottom: '2px solid #8884d8',
         }}
       >
-        {' '}
-        {/* Add a purple bottom border */}
         <div
           style={{
             display: 'flex',
@@ -181,9 +197,25 @@ function getCookie(name) {
               Map
             </button>
           </Link>
+          <button
+            style={{
+              backgroundColor: 'red',
+              color: 'white',
+              border: 'none',
+              borderRadius: 5,
+              padding: 10,
+              fontSize: '20px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+            onMouseLeave={(e) => (e.target.style.color = 'white')}
+            onClick={handleSOSClick}
+          >
+            Send SOS
+          </button>
         </div>
       </div>
-
       <div
         style={{
           display: 'flex',
@@ -212,6 +244,14 @@ function getCookie(name) {
         <Linegraph datas={lngdata} datakey="longitude" strokeColor="#ff6347" />{' '}
         <Linegraph datas={latdata} datakey="latitude" strokeColor="#1e90ff" />{' '}
       </div>
+      {showPopup && (
+        <div style={popupStyle}>
+          <div style={popupContentStyle}>
+            <p>SOS Sent</p>
+            <button onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
       <div
         style={{
           display: 'flex',
@@ -230,3 +270,30 @@ function getCookie(name) {
     </div>
   );
 }
+const popupStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1000,
+  transition: 'all 0.3s ease-in-out', // Smooth transition for the overlay
+};
+
+// Styles for the popup content
+const popupContentStyle = {
+  backgroundColor: 'black',
+  color: 'white',
+  padding: '40px', // Increased padding for larger size
+  borderRadius: '10px',
+  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+  fontSize: '20px',
+  textAlign: 'center',
+  width: '50%', // Larger width
+  maxWidth: '600px', // Maximum width
+  transition: 'all 0.3s ease-in-out', // Smooth transition for the content
+};

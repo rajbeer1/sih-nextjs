@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import './ResultsPage.css'; // Import the CSS file
 import {
   FaPercentage,
@@ -23,7 +24,7 @@ const ResultPage = () => {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
   }
-  const token = getCookie('token');
+  const token = Cookies.get('token');
   const [image, setImage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [sos, setsos] = useState('');
