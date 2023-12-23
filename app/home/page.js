@@ -57,81 +57,96 @@ const ResultPage = () => {
 
   return (
     <div>
-       <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            backgroundColor: 'black',
-          }}
-        >
-          <Link href="/home">
-            <button
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-              }}
-              onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
-              onMouseLeave={(e) => (e.target.style.color = 'white')}
-            >
-              Home
-            </button>
-          </Link>
-          <Link href="/data">
-            <button
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-              }}
-              onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
-              onMouseLeave={(e) => (e.target.style.color = 'white')}
-            >
-              Data
-            </button>
-          </Link>
-          <Link href="/map">
-            <button
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-              }}
-              onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
-              onMouseLeave={(e) => (e.target.style.color = 'white')}
-            >
-              Map
-            </button>
-          </Link>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          backgroundColor: 'black',
+        }}
+      >
+        <Link href="/home">
           <button
             style={{
-              backgroundColor: 'red',
+              backgroundColor: 'black',
               color: 'white',
               border: 'none',
-              borderRadius: 5,
-              padding: 10,
               fontSize: '20px',
               cursor: 'pointer',
               fontWeight: 'bold',
             }}
             onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
             onMouseLeave={(e) => (e.target.style.color = 'white')}
-            onClick={handleSOSClick}
           >
-            Send SOS
+            Home
           </button>
-        </div>
-      
+        </Link>
+        <Link href="https://miner-map.vercel.app/">
+          <button
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+            onMouseLeave={(e) => (e.target.style.color = 'white')}
+          >
+            Miner-map
+          </button>
+        </Link>
+        <Link href="/data">
+          <button
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+            onMouseLeave={(e) => (e.target.style.color = 'white')}
+          >
+            Data
+          </button>
+        </Link>
+        <Link href="/map">
+          <button
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+            onMouseLeave={(e) => (e.target.style.color = 'white')}
+          >
+            Map
+          </button>
+        </Link>
+        <button
+          style={{
+            backgroundColor: 'red',
+            color: 'white',
+            border: 'none',
+            borderRadius: 5,
+            padding: 10,
+            fontSize: '20px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+          }}
+          onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+          onMouseLeave={(e) => (e.target.style.color = 'white')}
+          onClick={handleSOSClick}
+        >
+          Send SOS
+        </button>
+      </div>
 
       <div className="container">
         <div className="image-container">

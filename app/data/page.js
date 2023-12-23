@@ -11,11 +11,6 @@ export default function () {
   const [latdata, setlatdata] = useState([]);
   const [lngdata, setlngdata] = useState([]);
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
   const token = Cookies.get('token');
   const [showPopup, setShowPopup] = useState(false);
 
@@ -163,6 +158,22 @@ function getCookie(name) {
               onMouseLeave={(e) => (e.target.style.color = 'white')}
             >
               Home
+            </button>
+          </Link>
+          <Link href="https://miner-map.vercel.app/">
+            <button
+              style={{
+                backgroundColor: 'black',
+                color: 'white',
+                border: 'none',
+                fontSize: '20px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+              }}
+              onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+              onMouseLeave={(e) => (e.target.style.color = 'white')}
+            >
+              Miner-map
             </button>
           </Link>
           <Link href="/data">
