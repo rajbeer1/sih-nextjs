@@ -81,22 +81,7 @@ const ResultPage = () => {
             Home
           </button>
         </Link>
-        <Link href="https://miner-map.vercel.app/">
-          <button
-            style={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: 'none',
-              fontSize: '20px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-            }}
-            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
-            onMouseLeave={(e) => (e.target.style.color = 'white')}
-          >
-            Miner-map
-          </button>
-        </Link>
+
         <Link href="/data">
           <button
             style={{
@@ -127,6 +112,22 @@ const ResultPage = () => {
             onMouseLeave={(e) => (e.target.style.color = 'white')}
           >
             Map
+          </button>
+        </Link>
+        <Link href="https://miner-map.vercel.app/">
+          <button
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#8884d8')}
+            onMouseLeave={(e) => (e.target.style.color = 'white')}
+          >
+            Miner-map
           </button>
         </Link>
         <button
