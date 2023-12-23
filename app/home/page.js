@@ -1,50 +1,34 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-import './ResultsPage.css'; // Import the CSS file
-import {
-  FaPercentage,
-  FaBalanceScale,
-  FaWater,
-  FaSeedling,
-} from 'react-icons/fa';
 import Link from 'next/link';
-
-const icons = {
-  'Iron Feed Percentage': <FaSeedling />,
-  'Silica Feed Percentage': <FaBalanceScale />,
-  'Ore Pulp PH': <FaWater />,
-  'Percentage Silica Concentrate': <FaPercentage />,
-};
+import Cookies from 'js-cookie';
+import './ResultsPage.css';
 
 const ResultPage = () => {
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
   const token = Cookies.get('token');
   const [image, setImage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [sos, setsos] = useState('');
-  const [form, setForm] = useState(null);
+  const [resultData, setResultData] = useState({});
+  const [otherParams, setOtherParams] = useState({});
+
   const handleSOSClick = async () => {
     try {
       const response = await axios.post(
         'http://4.227.178.188:3001/sos/send',
-        {}, // Request body (if any)
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-
       );
       if (response.data.email) {
         setShowPopup(true);
       }
-    }catch(err){}
+    } catch (err) {
+      console.error('Error in sending SOS:', err);
+    }
   };
 
   const getdata = async () => {
@@ -52,55 +36,28 @@ const ResultPage = () => {
       const response = await axios.get(
         'http://4.227.178.188:3001/data/photo/get'
       );
-      setImage(response.data.data.image_url);
-      setForm(response.data.data.ml_detail);
+      const data = response.data.data;
+      setImage(data.image_url);
+      const mlDetail = JSON.parse(data.ml_detail);
+      setResultData({
+        Confidence: mlDetail.Confidence,
+        'Linear Regression Prediction':
+          mlDetail['Linear Regression Prediction'],
+        'Predicted Grade': mlDetail['Predicted Grade'],
+      });
+      setOtherParams(mlDetail['Other Parameters']);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  function waitForThreeSeconds() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('');
-      }, 1000);
-    });
-  }
+  useEffect(() => {
+    getdata();
+  }, []);
 
-  waitForThreeSeconds().then((message) => console.log(message));
-
-  function convertToResultData(jsonData) {
-    try {
-      const data = JSON.parse(jsonData);
-      const feedData = data.feed_data[0];
-      const prediction = data.predictions[0];
-      return {
-        'Iron Feed Percentage': feedData[0],
-        'Silica Feed Percentage': feedData[1],
-        'Ore Pulp PH': feedData[5],
-        'Percentage Silica Concentrate': prediction,
-      };
-    } catch (error) {
-      console.error('Error parsing JSON:', error);
-      return {};
-    }
-  }
-
-  const resultData = form ? convertToResultData(form) : {};
-useEffect(() => {
-  getdata()
-}, []);
   return (
     <div>
-      <div
-        style={{
-          backgroundColor: 'black',
-          paddingTop: '20px',
-          paddingBottom: '20px',
-          borderBottom: '2px solid #8884d8',
-        }}
-      >
-        <div
+       <div
           style={{
             display: 'flex',
             justifyContent: 'space-around',
@@ -174,7 +131,8 @@ useEffect(() => {
             Send SOS
           </button>
         </div>
-      </div>
+      
+
       <div className="container">
         <div className="image-container">
           <img src={image} alt="Data Visualization" />
@@ -184,24 +142,51 @@ useEffect(() => {
           <div className="data-container">
             {Object.entries(resultData).map(([key, value]) => (
               <p key={key}>
-                <span className="icon">{icons[key]}</span>
+                <strong>{key}:</strong> {value}
+              </p>
+            ))}
+            <h3>Other Parameters</h3>
+            {Object.entries(otherParams).map(([key, value]) => (
+              <p key={key}>
                 <strong>{key}:</strong> {value}
               </p>
             ))}
           </div>
         </div>
-        {showPopup && (
-          <div style={popupStyle}>
-            <div style={popupContentStyle}>
-              <p>SOS Sent</p>
-              <button onClick={() => setShowPopup(false)}>Close</button>
-            </div>
-          </div>
-        )}
       </div>
+
+      {showPopup && (
+        <div style={popupStyle}>
+          <div style={popupContentStyle}>
+            <p>SOS Sent</p>
+            <button onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+const headerStyle = {
+  backgroundColor: 'black',
+  paddingTop: '20px',
+  paddingBottom: '20px',
+  borderBottom: '2px solid #8884d8',
+  display: 'flex',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+};
+
+const buttonStyle = {
+  backgroundColor: 'black',
+  color: 'white',
+  border: 'none',
+  fontSize: '20px',
+  cursor: 'pointer',
+  fontWeight: 'bold',
+  padding: '10px 20px',
+};
+
 const popupStyle = {
   position: 'fixed',
   top: 0,
@@ -213,20 +198,20 @@ const popupStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   zIndex: 1000,
-  transition: 'all 0.3s ease-in-out', // Smooth transition for the overlay
+  transition: 'all 0.3s ease-in-out',
 };
 
-// Styles for the popup content
 const popupContentStyle = {
   backgroundColor: 'black',
   color: 'white',
-  padding: '40px', // Increased padding for larger size
+  padding: '40px',
   borderRadius: '10px',
   boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
   fontSize: '20px',
   textAlign: 'center',
-  width: '50%', // Larger width
-  maxWidth: '600px', // Maximum width
-  transition: 'all 0.3s ease-in-out', // Smooth transition for the content
+  width: '50%',
+  maxWidth: '600px',
+  transition: 'all 0.3s ease-in-out',
 };
+
 export default ResultPage;
